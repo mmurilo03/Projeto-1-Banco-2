@@ -27,6 +27,7 @@ header{
 }
 
 header h1{
+  font-size: 2vw;
   padding-left: 1vw;
 }
 
@@ -37,7 +38,7 @@ button{
   border-color: #011F39;
   text-align: center;
   padding: 0.5vw 2vw;
-  font-size: 14px;
+  font-size: 1vw;
   border-radius: 5px;
   font-weight: bold;
 }
@@ -91,7 +92,7 @@ button:hover{
   margin-left: 1vw;
   width: 70%;
   height: 5vh;
-  font-size: 14px;
+  font-size: 1vw;
 }
 
 .form-content input::placeholder{
@@ -105,17 +106,18 @@ button:hover{
   border-radius: 5px;
 }
 
-.botao-add{
-  width: fit-content;
+#save-event{
+  width: 15vw;
+}
+
+#show-event{
+  width: 35vw;
   align-self:flex-end;
   margin-top: 1vw;
   padding: 5px 10vw;
   border-radius: 5px;
   display: flex;
   align-items: center;
-}
-
-.botao-add p{
-  font-size: 16px;
-  margin-left: 5px;
+  justify-content: center;
+  gap: 5px;
 }

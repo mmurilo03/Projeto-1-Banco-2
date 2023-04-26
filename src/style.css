@@ -7,7 +7,7 @@
 body {
   width: 100%;
   height: 100%;
-  background-image: url(./img/bg-map.jpg);
+  background-image: url(./img/bg-map.png);
   background-position:center;
   background-size: cover;
 }
@@ -35,7 +35,6 @@ button{
   cursor: pointer;
   color: #fff;
   background-color: #011F39;
-  border-color: #011F39;
   text-align: center;
   padding: 0.5vw 2vw;
   font-size: 1vw;

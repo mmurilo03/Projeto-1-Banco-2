@@ -2,8 +2,6 @@ let map;
 let marker;
 let markers = [];
 
-
-
 async function initMap() {
   //@ts-ignore
 
@@ -13,6 +11,7 @@ async function initMap() {
   map = new Map(document.getElementById("map"), {
     center: { lat: -6.88778, lng: -38.55700 },
     zoom: 14,
+    disableDefaultUI: true
   });
 
   map.addListener("click", (event) => {
@@ -36,18 +35,21 @@ async function initMap() {
 
 initMap();
 
-
-
 let buttonSave = document.querySelector('#save-event');
-buttonSave.addEventListener('click', salvar);
+buttonSave.addEventListener('click', async () => { 
+  await salvar()
+  mostrar()
+  mostrar()
+});
 
 let buttonMostrar = document.querySelector('#show-event');
-buttonMostrar.addEventListener('click', mostrar);
+buttonMostrar.addEventListener('click', () => {
+  mostrar()
+});
 
 let inputEvent = document.querySelector('#nome');
 
 async function salvar() {
-
   const obj = {
     nome: document.getElementById('nome').value,
     lat: marker.getPosition().lat(),
@@ -107,9 +109,7 @@ async function salvar() {
 }
 
 async function mostrar() {
-
-  console.log(markers.length);
-  if (markers.length === 0){
+  if (markers.length === 0 ){
     await fetch("http://localhost:3000/pontos/sincronizar", {
       method: 'GET',
       headers: {
@@ -133,7 +133,6 @@ async function mostrar() {
 
     for (let evento of eventos) {
       
-      console.log(evento);
       let markerSalvo = new google.maps.Marker({
         position: { lat: evento.geometria.coordinates[1], lng: evento.geometria.coordinates[0] },
         map,
@@ -152,7 +151,4 @@ async function mostrar() {
     markers = []
     document.querySelector("#show-event-text").textContent = "Mostrar eventos"
   } 
-
-  
-  console.log(markers.length);
 }

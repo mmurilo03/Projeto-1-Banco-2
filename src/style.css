@@ -22,8 +22,13 @@ header{
   height: 8vh;
   color: #011F39;
   font-weight: bolder;
-  border-radius: 6px;
+  border-radius: 0.5vw;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25)
+}
+
+header img{
+  width: 3vw;
+  height: 8vw;
 }
 
 header h1{
@@ -38,8 +43,10 @@ button{
   text-align: center;
   padding: 0.5vw 2vw;
   font-size: 1vw;
-  border-radius: 5px;
+  border-radius: 0.5vw;
   font-weight: bold;
+  height: 2.2vw;
+  width: 2.2vw;
 }
 
 button:hover{
@@ -87,26 +94,41 @@ button:hover{
   height: 100%;
   width: 100%;
   aspect-ratio: 1/1;
-  border-radius: 5px;
+  border-radius: 0.5vw;
   position: absolute; 
   z-index: 1;
 }
 
 .event-list{
   width: 30%;
-  height: 100%;
+  max-height: 100%;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 0.5vw;
   z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding-left: 1vw;
   overflow: scroll;
+  overflow-x: hidden;
+  transition: width 0.5s ease-in-out;
+  -webkit-box-shadow: 14px 4px 16px -12px rgba(28,28,28,0.43);
+  -moz-box-shadow: 14px 4px 16px -12px rgba(28,28,28,0.43);
+  box-shadow: 14px 4px 16px -12px rgba(28,28,28,0.43);
+}
+
+::-webkit-scrollbar{
+  width: 1vw;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #011F39;
+  border-radius: 1vw;
 }
 
 .event-list.hide{
-  max-height: 0;
+  height: 0;
+  width: 0;
   pointer-events: none;
 }
 
@@ -114,6 +136,7 @@ button:hover{
   display: flex;
   margin-top: 1rem;
   width: 90%;
+  min-height: 10vh;
   height: auto;
   background-color: #011F39;
   color: #fff;
@@ -124,35 +147,45 @@ button:hover{
   gap: 10px;
   padding-left: 0.5vw;
   padding-right: 0.5vw;
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+  margin-left: 0.1vw;
+}
+
+.icon-event-list{
+  width: 10%;
 }
 
 .icon-event-list img{
   width: 2vw;
+  margin-left: 0.5vw;
 }
 
-.event-info{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
 
 .event-desc{
-  overflow:calc();
+  width: 70%;
+  margin-top: 1vw;
   height: auto;
   margin-bottom: 1vw;
 }
 
-.event-local{
-  margin-top: 1vw;
+.event-desc h3{
+  margin-left: 1vw;
+  word-break: break-all;
+  font-weight: normal;
 }
+
+.button-go-to-event{
+  width: 30%;
+}
+
 
 #go-to-event{
   font-size: 1vw;
   display: flex;
   justify-content: center;
-  width: 4rem;
-  height: 2rem;
+  width: 3vw;
+  height: 2.5vw;
   font-weight: bold;
   color: #011F39;
   background-color: #fff;
@@ -165,15 +198,13 @@ button:hover{
   transition: 0.3s ease-in;
 }
 
-
-
 .form-content{
   background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-around;
   height: 7vh;
-  border-radius: 5px;
+  border-radius: 0.5vw;
   box-shadow: 1px 2px 4px rgb(117, 117, 117);
 }
 
@@ -193,14 +224,30 @@ button:hover{
   width: 15vw;
 }
 
+.event-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.show-event-button img{
+  width: 3vw;
+  height: 2vw;
+}
+
 #show-event{
   width: 35vw;
   align-self:flex-end;
   margin-top: 1vw;
   padding: 5px 10vw;
-  border-radius: 5px;
+  border-radius: 0.5vw;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+}
+
+#hide-event{
+  margin-top: 1vw;
+  width: 10vw;
 }

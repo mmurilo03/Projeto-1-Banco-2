@@ -2,6 +2,13 @@ let map;
 let marker;
 let markers = [];
 let listEvents = document.querySelector('.event-list');
+let isClicked;
+let mapPin;
+let mapPinShowEvent;
+let mapPinFocusEvent;
+
+let inputEvent = document.querySelector('#nome');
+
 
 async function initMap() {
   //@ts-ignore
@@ -17,12 +24,13 @@ async function initMap() {
   });
 
   map.addListener("click", (event) => {
+    isClicked = true;
     console.log(`lat: ${event.latLng.lat()}, lng: ${event.latLng.lng()}`);
     marker.position = { lat: event.latLng.lat(), lng: event.latLng.lng() }
     marker.setPosition(event.latLng)
   })
 
-  const mapPin = {
+  mapPin = {
     url: "./img/map-pin.svg", // url
     scaledSize: new google.maps.Size(30, 40), // scaled size
   };
@@ -39,9 +47,19 @@ initMap();
 
 let buttonSave = document.querySelector('#save-event');
 buttonSave.addEventListener('click', async () => {
-  await salvar()
-  await mostrar()
-  await mostrar()
+  if (isClicked) {
+    if (inputEvent.value !== '') {
+      await salvar()
+      await mostrar()
+      await mostrar()
+    }
+    else {
+      inputWarning()
+    }
+
+  } else {
+    createMarkerWarning()
+  }
 });
 
 let buttonMostrar = document.querySelector('#show-event');
@@ -49,7 +67,6 @@ buttonMostrar.addEventListener('click', () => {
   mostrar()
 });
 
-let inputEvent = document.querySelector('#nome');
 
 async function salvar() {
   const obj = {
@@ -81,21 +98,10 @@ async function salvar() {
     sucessButton()
   })
     .catch(error => {
-      setTimeout(() => {
-        buttonSave.style.background = '#011F39'; //blue
-        buttonSave.textContent = 'Salvar evento';
-        buttonSave.style.cursor = 'pointer'
-        buttonSave.disabled = false;
-      }, 3000);
-      buttonSave.style.transition = '0.3s ease-in'
-      buttonSave.style.background = '#ff3333'; //red
-      buttonSave.textContent = 'Erro!'
-      buttonSave.style.cursor = 'not-allowed'
-      buttonSave.disabled = true;
+      errorButton()
 
-
-      console.log(error)
     });
+  isClicked = false;
 }
 
 async function mostrar() {
@@ -116,8 +122,14 @@ async function mostrar() {
       },
     })
     const eventos = await response.json()
-    const mapPinShowEvent = {
+
+    mapPinShowEvent = {
       url: "./img/map-pin-show-event.svg", // url
+      scaledSize: new google.maps.Size(30, 40), // scaled size
+    };
+
+    mapPinFocusEvent = {
+      url: "./img/map-pin-focus-event.svg", // url
       scaledSize: new google.maps.Size(30, 40), // scaled size
     };
 
@@ -135,6 +147,26 @@ async function mostrar() {
     if (markers.length > 0) {
       document.querySelector("#show-event-text").textContent = "Ocultar eventos"
       listEvents.classList.remove('hide')
+      let divButtonList = document.querySelector('.hide-event-button')
+      let buttonHideList = document.createElement('button')
+      buttonHideList.id = 'hide-event'
+      buttonHideList.textContent = 'Ocultar lista'
+      divButtonList.appendChild(buttonHideList)
+
+      let showList = true;
+
+      buttonHideList.addEventListener('click', () => {
+        if (showList) {
+          listEvents.classList.add('hide')
+          buttonHideList.textContent = 'Mostrar lista'
+          showList = false
+        } else {
+          listEvents.classList.remove('hide')
+          buttonHideList.textContent = 'Ocultar lista'
+          showList = true
+        }
+
+      })
     }
   } else {
     for (let markerSalvo of markers) {
@@ -144,32 +176,26 @@ async function mostrar() {
     }
     markers = []
     document.querySelector("#show-event-text").textContent = "Mostrar eventos"
-      listEvents.classList.add('hide')
-      
+    listEvents.classList.add('hide')
+    let divButtonList = document.querySelector('.hide-event-button')
+    let buttonHide = document.querySelector('#hide-event')
+    divButtonList.removeChild(buttonHide)
   }
 }
 
-function createCard(evento, index){
+function createCard(evento, index) {
   let card = document.createElement('div')
   card.classList.add('event-card')
-  
+
   let iconDiv = document.createElement('div')
   iconDiv.classList.add('icon-event-list')
   let icon = document.createElement('img')
   icon.src = './img/icon-event-list.svg'
 
-  let eventInfoDiv = document.createElement('div')
-  eventInfoDiv.classList.add('event-info')
-
-  let eventLocalDiv = document.createElement('event-local')
-  eventLocalDiv.classList.add('event-local')
-  
-  let localEvent = document.createElement('h3')
-  localEvent.textContent = evento.geometria.coordinates[1]
-  let descEvent = document.createElement('p')
+  let descEvent = document.createElement('h3')
   descEvent.textContent = evento.descricao
 
-  let eventDescDiv = document.createElement('event-desc')
+  let eventDescDiv = document.createElement('div')
   eventDescDiv.classList.add('event-desc')
 
   let buttonDiv = document.createElement('div')
@@ -179,38 +205,80 @@ function createCard(evento, index){
   buttonGoToEvent.textContent = 'Ver'
 
   buttonGoToEvent.addEventListener('click', () => {
-    console.log(index)
     map.setCenter(markers[index].getPosition())
+    for (let markerSalvo of markers) {
+      markerSalvo.setIcon(mapPinShowEvent)
+    }
+    markers[index].setIcon(mapPinFocusEvent)
   })
 
-  eventLocalDiv.classList.add('event-local')
-
-  
   listEvents.appendChild(card)
   card.appendChild(iconDiv)
-  card.appendChild(eventInfoDiv)
+  card.appendChild(eventDescDiv)
   card.appendChild(buttonDiv)
   iconDiv.appendChild(icon)
-  eventInfoDiv.appendChild(eventLocalDiv)
-  eventLocalDiv.appendChild(localEvent)
-  eventInfoDiv.appendChild(eventDescDiv)
   eventDescDiv.appendChild(descEvent)
+
+
+
   buttonDiv.appendChild(buttonGoToEvent)
 }
 
-function sucessButton(){
+function sucessButton() {
   setTimeout(() => {
-      buttonSave.style.background = '#011F39'; //blue
-      buttonSave.textContent = 'Salvar evento';
-      buttonSave.style.cursor = 'pointer'
-      buttonSave.disabled = false;
-    }, 2000);
-    buttonSave.style.transition = '0.2s ease-in'
-    buttonSave.style.background = '#53a653'; //green
-    buttonSave.textContent = 'Salvo!'
-    buttonSave.style.cursor = 'not-allowed'
-    buttonSave.disabled = true;
+    buttonSave.style.background = '#011F39'; //blue
+    buttonSave.textContent = 'Salvar evento';
+    buttonSave.style.cursor = 'pointer'
+    buttonSave.disabled = false;
+  }, 2000);
+  buttonSave.style.transition = '0.2s ease-in'
+  buttonSave.style.background = '#53a653'; //green
+  buttonSave.textContent = 'Salvo!'
+  buttonSave.style.cursor = 'not-allowed'
+  buttonSave.disabled = true;
 
 
-    inputEvent.value = '';
+  inputEvent.value = '';
+}
+
+function createMarkerWarning() {
+  setTimeout(() => {
+    buttonSave.style.background = '#011F39'; //blue
+    buttonSave.textContent = 'Salvar evento';
+    buttonSave.style.cursor = 'pointer'
+    buttonSave.disabled = false;
+  }, 2000);
+  buttonSave.style.transition = '0.2s ease-in'
+  buttonSave.style.background = '#A9A9A9'; //yellow
+  buttonSave.textContent = 'Crie um marcador'
+  buttonSave.style.cursor = 'not-allowed'
+  buttonSave.disabled = true;
+}
+
+function inputWarning() {
+  setTimeout(() => {
+    buttonSave.style.background = '#011F39'; //blue
+    buttonSave.textContent = 'Salvar evento';
+    buttonSave.style.cursor = 'pointer'
+    buttonSave.disabled = false;
+  }, 2000);
+  buttonSave.style.transition = '0.2s ease-in'
+  buttonSave.style.background = '#ff3333'; //yellow
+  buttonSave.textContent = 'Digite o nome'
+  buttonSave.style.cursor = 'not-allowed'
+  buttonSave.disabled = true;
+}
+
+function errorButton(){
+  setTimeout(() => {
+    buttonSave.style.background = '#011F39'; //blue
+    buttonSave.textContent = 'Salvar evento';
+    buttonSave.style.cursor = 'pointer'
+    buttonSave.disabled = false;
+  }, 3000);
+  buttonSave.style.transition = '0.3s ease-in'
+  buttonSave.style.background = '#ff3333'; //red
+  buttonSave.textContent = 'Erro!'
+  buttonSave.style.cursor = 'not-allowed'
+  buttonSave.disabled = true;
 }

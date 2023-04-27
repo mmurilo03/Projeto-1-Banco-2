@@ -58,7 +58,7 @@ button:hover{
 
 .content {
   margin-top: 2%;
-  width: 70%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,11 +70,102 @@ button:hover{
 }
 
 .map-content{
-  height: 70vh;
   display: flex;
   flex-direction: column;
   padding-top: 1vw;
 }
+
+.map-and-events{
+  height: 65vh;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+
+#map {
+  height: 100%;
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 5px;
+  position: absolute; 
+  z-index: 1;
+}
+
+.event-list{
+  width: 30%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 5px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 1vw;
+  overflow: scroll;
+}
+
+.event-list.hide{
+  max-height: 0;
+  pointer-events: none;
+}
+
+.event-card{
+  display: flex;
+  margin-top: 1rem;
+  width: 90%;
+  height: auto;
+  background-color: #011F39;
+  color: #fff;
+  border-radius: 0.5vw;
+  font-size: 1vw;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+}
+
+.icon-event-list img{
+  width: 2vw;
+}
+
+.event-info{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.event-desc{
+  overflow:calc();
+  height: auto;
+  margin-bottom: 1vw;
+}
+
+.event-local{
+  margin-top: 1vw;
+}
+
+#go-to-event{
+  font-size: 1vw;
+  display: flex;
+  justify-content: center;
+  width: 4rem;
+  height: 2rem;
+  font-weight: bold;
+  color: #011F39;
+  background-color: #fff;
+  border-color: #fff;
+}
+
+#go-to-event:hover{
+  background-color: #c2f1ff;
+  border-color: #c2f1ff;
+  transition: 0.3s ease-in;
+}
+
+
 
 .form-content{
   background-color: #fff;
@@ -96,13 +187,6 @@ button:hover{
 
 .form-content input::placeholder{
   padding-left: 2px;
-}
-
-
-#map {
-  height: 100%;
-  aspect-ratio: 1/1;
-  border-radius: 5px;
 }
 
 #save-event{
